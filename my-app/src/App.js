@@ -1,26 +1,50 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ToDoInput from './components/ToDoInput';
+import List from './components/List';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    todos: []
+  }
+
+  handleTodo = (value) => {
+    const todos = [
+      ...this.state.todos,
+      {
+        id: Date.now(),
+        value,
+        completed: false,
+      }
+    ]
+    this.setState({
+      todos: todos,
+    })
+  }
+
+  toggleCompleted = (id) => {
+    const todos = this.state.todos.map(item => {
+      if (item.id === id) {
+        item.completed = !item.completed;
+      }
+      return item
+    });
+
+    this.setState({
+      todos: todos,
+    })
+  }
+
+  render() {
+    const { todos } = this.state;
+
+    return (
+      <div className="App" >
+        <ToDoInput addTodo={this.handleTodo} />
+        <List toggleCompleted={this.toggleCompleted} items={todos} />
+      </div>
+    );
+  }
 }
 
 export default App;
