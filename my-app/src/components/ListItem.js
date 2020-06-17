@@ -1,10 +1,5 @@
 import React from 'react';
 
-
-const handleClick = (props) = (e) => {
-    props.onClick(id)
-};
-
 function ListItem({
     item: { id, value, completed },
     onClick
@@ -13,8 +8,8 @@ function ListItem({
         ...(completed && { textDecoration: 'line-through' })
     };
     return (
-        <li onClick={handleClick(props)} style={styles}>{value}</li>
+        <li onClick={() => onClick(id)} style={styles}>{value}</li>
     );
 }
-п
+
 export default ListItem;

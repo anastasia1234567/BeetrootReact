@@ -2,10 +2,12 @@ import React from 'react';
 import './App.css';
 import ToDoInput from './components/ToDoInput';
 import List from './components/List';
+import Buttons from './components/Buttons';
 
 class App extends React.Component {
   state = {
-    todos: []
+    todos: [],
+    filter: 'All',
   }
 
   handleTodo = (value) => {
@@ -35,13 +37,40 @@ class App extends React.Component {
     })
   }
 
+  applyFilter = (filter) => {
+    this.setState({
+      filter,
+    })
+  }
+
+  filterTodos() {
+    const { filter: filterBy, todos } = this.state;
+    switch (filterBy) {
+      case 'Active': {
+        return todos.filter(({ completed }) => !completed);
+      }
+      case 'Completed': {
+        return todos.filter(todo => todo.completed)
+      }
+      default: return todos
+
+    }
+  }
+
+  clearTodos = () => {
+    this.setState({
+      todos: this.state.todos.filter(({ completed }) => !completed)
+    })
+  }
+
   render() {
     const { todos } = this.state;
 
     return (
       <div className="App" >
         <ToDoInput addTodo={this.handleTodo} />
-        <List toggleCompleted={this.toggleCompleted} items={todos} />
+        <List toggleCompleted={this.toggleCompleted} items={this.filterTodos(todos)} />
+        <Buttons filterBy={this.applyFilter} clearCompleted={this.clearTodos} />
       </div>
     );
   }
